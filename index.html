@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Add WhatsApp Channels</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f8f9fa;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: #25d366;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+    .container {
+      max-width: 600px;
+      margin: 2rem auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    h2 {
+      color: #25d366;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 0.8rem;
+      margin: 0.5rem 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      background: #25d366;
+      color: white;
+      padding: 0.8rem 1.5rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .channel {
+      background: #f1f1f1;
+      padding: 1rem;
+      margin: 1rem 0;
+      border-left: 5px solid #25d366;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Add WhatsApp Channels</h1>
+    <p>Netflix 🥵 - Netflix web series</p>
+  </header>
+
+  <div class="container">
+    <h2>Submit Your Channel</h2>
+    <input type="text" id="channelTitle" placeholder="Channel Title" required />
+    <input type="text" id="channelLink" placeholder="WhatsApp Channel Link" required />
+    <textarea id="channelDesc" placeholder="Channel Description"></textarea>
+    <button onclick="addChannel()">Submit</button>
+
+    <h2>All Channels</h2>
+    <div id="channelsList"></div>
+  </div>
+
+  <script>
+    const channelsList = document.getElementById('channelsList');
+
+    function loadChannels() {
+      const channels = JSON.parse(localStorage.getItem('channels') || '[]');
+      channelsList.innerHTML = '';
+      channels.forEach(channel => {
+        const div = document.createElement('div');
+        div.className = 'channel';
+        div.innerHTML = `<strong>${channel.title}</strong><br>
+                         <a href="${channel.link}" target="_blank">${channel.link}</a><br>
+                         <p>${channel.desc}</p>`;
+        channelsList.appendChild(div);
+      });
+    }
+
+    function addChannel() {
+      const title = document.getElementById('channelTitle').value;
+      const link = document.getElementById('channelLink').value;
+      const desc = document.getElementById('channelDesc').value;
+
+      if (!title || !link) return alert("Please enter title and link");
+
+      const channels = JSON.parse(localStorage.getItem('channels') || '[]');
+      channels.unshift({ title, link, desc });
+      localStorage.setItem('channels', JSON.stringify(channels));
+      loadChannels();
+
+      document.getElementById('channelTitle').value = '';
+      document.getElementById('channelLink').value = '';
+      document.getElementById('channelDesc').value = '';
+    }
+
+    loadChannels();
+  </script>
+</body>
+</html>
